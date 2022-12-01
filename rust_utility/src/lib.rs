@@ -55,9 +55,8 @@ pub fn read_daily_input(filename: &str, return_amount: usize) -> Result<Vec<u32>
     }
 
     elfs.sort_by_key(|k| -1 * *k as i32);
-    if return_amount == usize::MAX {
-        Ok(elfs)
-    } else {
-        Ok(elfs[0..return_amount].to_vec())
+    if return_amount != usize::MAX {
+        elfs.truncate(return_amount);
     }
+    Ok(elfs)
 }
