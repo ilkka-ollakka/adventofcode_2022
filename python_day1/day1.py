@@ -6,7 +6,7 @@ def datareader(filename, translate=int):
             yield translate(dataline.strip())
 
 
-data = datareader("day1.txt", translate=str)
+data = datareader("../day1.txt", translate=str)
 elfs = []
 elf = 0
 for line in data:
