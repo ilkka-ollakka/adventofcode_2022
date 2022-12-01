@@ -1,7 +1,7 @@
 use rust_utility::{read_daily_input, AOCError};
 
 fn main() -> Result<(), AOCError> {
-    let elfs = &(read_daily_input("day1.txt", 3)?);
+    let elfs = read_daily_input("day1.txt", 3)?;
     // println!("elfs: {:#?}", elfs);
 
     let mut result: u32 = 0;
