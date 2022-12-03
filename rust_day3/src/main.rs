@@ -24,8 +24,8 @@ fn main() -> Result<(), Box<dyn Error>> {
 
         let length: usize = vector_string.len() / 2;
         let (left, right) = vector_string.split_at(length);
-        let left_hash: HashSet<&char> = left.into_iter().collect();
-        let right_hash: HashSet<&char> = right.into_iter().collect();
+        let left_hash: HashSet<&char> = left.iter().collect();
+        let right_hash: HashSet<&char> = right.iter().collect();
 
         // println!("left and right hash-sets: {:?} {:?}", left_hash, right_hash);
 
@@ -49,23 +49,22 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut final_score_part2: i32 = 0;
 
-    let mut stack: Vec<HashSet<char>> = Vec::new();
+    let mut stack: Vec<HashSet<char>> = Vec::with_capacity(2);
     for line in data_part2 {
         // println!("data: {:#?}", line);
-        let vector_string = line.chars().collect::<Vec<char>>();
 
-        let string_hash: HashSet<char> = vector_string.into_iter().collect();
+        let string_hash: HashSet<char> = line.chars().collect();
         if stack.len() == 2 {
             let first_item = stack.pop().unwrap();
-            let common_first: Vec<&char> = string_hash.intersection(&first_item).collect();
+            let common_first = string_hash.intersection(&first_item).copied();
 
             let second_item = stack.pop().unwrap();
-            let common_hash: HashSet<char> = common_first.into_iter().map(|x| *x).collect();
+            let common_hash: HashSet<char> = common_first.collect();
             let common_second: char = second_item
                 .intersection(&common_hash)
                 .collect::<Vec<&char>>()
                 .pop()
-                .map(|x| *x)
+                .copied()
                 .unwrap();
             // println!("common {:?}", common_second);
             let common_score = scores.iter().position(|&x| x == common_second).unwrap();
