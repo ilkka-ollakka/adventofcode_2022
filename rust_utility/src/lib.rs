@@ -13,8 +13,8 @@ pub enum AOCError {
     FileError(std::io::Error),
 }
 
-pub fn read_file_and_split(filename: &str) -> Result<Vec<(String, String)>, Box<dyn Error>> {
-    let mut parsed_output: Vec<(String, String)> = Vec::new();
+pub fn read_file_and_split(filename: &str) -> Result<Vec<String>, Box<dyn Error>> {
+    let mut parsed_output: Vec<String> = Vec::new();
 
     let file = File::open(format!("../{}", filename))?;
     let mut filebuffer = BufReader::new(file);
@@ -29,12 +29,9 @@ pub fn read_file_and_split(filename: &str) -> Result<Vec<(String, String)>, Box<
 
         line = (*line.trim()).to_string();
 
-        let mut splitted_output = line.split(" ");
+        // println!("output: {:#?}", line);
 
-        parsed_output.push((
-            splitted_output.next().unwrap().to_string(),
-            splitted_output.next().unwrap().to_string(),
-        ));
+        parsed_output.push(line);
     }
 
     return Ok(parsed_output);

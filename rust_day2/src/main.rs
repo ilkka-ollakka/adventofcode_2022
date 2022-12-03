@@ -73,7 +73,13 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     let mut final_score: u32 = 0;
 
-    for (opponent, own) in output {
+    for line in output {
+        let mut line_split = line.split(" ");
+        let (opponent, own) = (
+            line_split.next().unwrap().to_string(),
+            line_split.next().unwrap().to_string(),
+        );
+
         println!("opponent {} own {}", opponent, own);
         let mapped_own = map_own_to_piece(&own);
 
@@ -96,7 +102,12 @@ fn main() -> Result<(), Box<dyn Error>> {
 
     final_score = 0;
 
-    for (opponent, own) in output2 {
+    for line in output2 {
+        let mut line_split = line.split(" ");
+        let (opponent, own) = (
+            line_split.next().unwrap().to_string(),
+            line_split.next().unwrap().to_string(),
+        );
         println!("opponent {} own {}", opponent, own);
         let mapped_own = own_piece_to_result_piece(&opponent, &own);
 
