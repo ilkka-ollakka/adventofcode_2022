@@ -2,6 +2,15 @@ use std::collections::HashSet;
 use std::error::Error;
 use std::fs;
 
+fn find_marker(input: &str, sequence_length: usize) -> Option<usize> {
+    input
+        .chars()
+        .collect::<Vec<char>>()
+        .windows(sequence_length)
+        .position(|window| window.iter().collect::<HashSet<_>>().len() == sequence_length)
+        .map(|pos| pos + sequence_length)
+}
+
 fn find_sequence(input: &str, sequence_length: usize) -> usize {
     let file_chars: Vec<char> = input.chars().collect();
     // println!("Token {file_chars:?}");
@@ -36,7 +45,8 @@ fn main() -> Result<(), Box<dyn Error>> {
     for line in file_input.lines() {
         let part1 = find_sequence(&line, 4);
         let token_start = &line[0..=6];
-        println!("First part {part1} for line starting with {token_start}");
+        let part1_marker = find_marker(line, 4).expect("Didn't find marker");
+        println!("First part {part1} {part1_marker} for line starting with {token_start}");
     }
 
     for line in file_input.lines() {
