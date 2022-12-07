@@ -1,8 +1,5 @@
 #!/usr/bin/env python3
 
-from ast import parse
-
-
 class Directory:
 
     def __init__(self, directory_name, parent_directory=None):
