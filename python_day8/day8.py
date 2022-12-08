@@ -3,21 +3,21 @@
 from enum import Enum
 
 
-def datareader(filename, translate=str):
+def datareader(filename: str, translate=str) -> list:
     with open(filename, "r") as fileinput:
         for dataline in fileinput:
             yield translate(dataline.strip())
 
 
-def split_row(string_input):
+def split_row(string_input: str) -> list:
     return [int(x) for x in string_input]
 
 
-def column_as_row(array, column_number):
+def column_as_row(array: list, column_number: int) -> list:
     return [x[column_number] for x in array]
 
 
-def parse_data(data):
+def parse_data(data: list) -> list:
     tree_array = []
 
     for line in data:
@@ -50,7 +50,7 @@ def get_direction_vector(data_array: list, x: int, y: int, direction: Direction)
     return translated_coordinates[y+1:]
 
 
-def find_visible_trees(data_array, tree_stack):
+def find_visible_trees(data_array: list, tree_stack: list) -> list:
     for y in range(1, len(data_array)-1):
         for x in range(1, len(data_array[0])-1):
             # print(f" point {x}{y}")
@@ -67,7 +67,7 @@ def find_visible_trees(data_array, tree_stack):
     return tree_stack
 
 
-def calculate_scenic_score(data_array, y, x):
+def calculate_scenic_score(data_array: list, y: int, x: int) -> int:
     score = 1
     value_to_check = data_array[y][x]
     # print(f"checking point {x} {y} with value of {value_to_check}")
@@ -86,7 +86,7 @@ def calculate_scenic_score(data_array, y, x):
     return score
 
 
-def calculate_visible_areas(data_array, tree_stack):
+def calculate_visible_areas(data_array: list, tree_stack: list) -> list:
     areas = []
 
     # print(tree_stack)
