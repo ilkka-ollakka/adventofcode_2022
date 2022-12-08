@@ -57,28 +57,13 @@ def find_visible_trees(data_array, tree_stack):
             # Check if tree is highest in row
             tree_height = data_array[y][x]
             # print(f" data_line {data_array[y]} right side {right_side}")
-            if tree_height > max(get_direction_vector(data_array, x, y, Direction.RIGHT)):
-                # print(
-                #     f"tree [{y}][{x}] visible right {tree_height}")
-                tree_stack.append((y, x))
-                continue
+            for direction in [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]:
+                if tree_height > max(get_direction_vector(data_array, x, y, direction)):
+                    # print(
+                    #     f"tree [{y}][{x}] visible right {tree_height}")
+                    tree_stack.append((y, x))
+                    break
 
-            if tree_height > max(get_direction_vector(data_array, x, y, Direction.LEFT)):
-                # print(
-                #     f"tree [{y}][{x}] visible left {tree_height}")
-                tree_stack.append((y, x))
-                continue
-
-            if tree_height > max(get_direction_vector(data_array, x, y, Direction.UP)):
-                # print(f"tree [{y}][{x}] visible top {tree_height}")
-                tree_stack.append((y, x))
-                continue
-
-            if tree_height > max(get_direction_vector(data_array, x, y, Direction.DOWN)):
-                # print(
-                #     f"tree [{y}][{x}] visible down {tree_height}")
-                tree_stack.append((y, x))
-                continue
     return tree_stack
 
 
