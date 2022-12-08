@@ -53,30 +53,30 @@ def get_direction_vector(data_array: list, x: int, y: int, direction: Direction)
 def find_visible_trees(data_array, tree_stack):
     for y in range(1, len(data_array)-1):
         for x in range(1, len(data_array[0])-1):
-            print(f" point {x}{y}")
+            # print(f" point {x}{y}")
             # Check if tree is highest in row
             tree_height = data_array[y][x]
             # print(f" data_line {data_array[y]} right side {right_side}")
             if tree_height > max(get_direction_vector(data_array, x, y, Direction.RIGHT)):
-                print(
-                    f"tree [{y}][{x}] visible right {tree_height}")
+                # print(
+                #     f"tree [{y}][{x}] visible right {tree_height}")
                 tree_stack.append((y, x))
                 continue
 
             if tree_height > max(get_direction_vector(data_array, x, y, Direction.LEFT)):
-                print(
-                    f"tree [{y}][{x}] visible left {tree_height}")
+                # print(
+                #     f"tree [{y}][{x}] visible left {tree_height}")
                 tree_stack.append((y, x))
                 continue
 
             if tree_height > max(get_direction_vector(data_array, x, y, Direction.UP)):
-                print(f"tree [{y}][{x}] visible top {tree_height}")
+                # print(f"tree [{y}][{x}] visible top {tree_height}")
                 tree_stack.append((y, x))
                 continue
 
             if tree_height > max(get_direction_vector(data_array, x, y, Direction.DOWN)):
-                print(
-                    f"tree [{y}][{x}] visible down {tree_height}")
+                # print(
+                #     f"tree [{y}][{x}] visible down {tree_height}")
                 tree_stack.append((y, x))
                 continue
     return tree_stack
@@ -85,7 +85,7 @@ def find_visible_trees(data_array, tree_stack):
 def calculate_scenic_score(data_array, y, x):
     score = 1
     value_to_check = data_array[y][x]
-    print(f"checking point {x} {y} with value of {value_to_check}")
+    # print(f"checking point {x} {y} with value of {value_to_check}")
     for direction in [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT]:
         vector = get_direction_vector(data_array, x, y, direction)
         score_value = len(vector)
@@ -93,18 +93,18 @@ def calculate_scenic_score(data_array, y, x):
             if value >= value_to_check:
                 score_value = len(vector[:length+1])
                 break
-        print(
-            f"{x} {y} point direction {direction} length {score_value} vector {vector}")
+        # print(
+        #     f"{x} {y} point direction {direction} length {score_value} vector {vector}")
         score *= score_value
 
-    print(f"{x} {y} final score {score}")
+    # print(f"{x} {y} final score {score}")
     return score
 
 
 def calculate_visible_areas(data_array, tree_stack):
     areas = []
 
-    print(tree_stack)
+    # print(tree_stack)
     for tree_position in tree_stack:
         (y, x) = tree_position
         if x == 0 or x == len(data_array[0]):
@@ -114,11 +114,11 @@ def calculate_visible_areas(data_array, tree_stack):
             areas.append(0)
             continue
         score = calculate_scenic_score(data_array, y, x)
-        print(
-            f"position {x} {y} score {score}")
+        # print(
+        #     f"position {x} {y} score {score}")
         areas.append(score)
 
-    print(areas)
+    # print(areas)
 
     return areas
 
@@ -127,9 +127,12 @@ if __name__ == '__main__':
     data = datareader("../day8.txt", split_row)
     data_array = parse_data(data)
 
-    print(data_array)
+    # print(data_array)
     # trees on the edge, always visible
     tree_stack = []
+
+    tree_stack = find_visible_trees(data_array, tree_stack)
+
     for x in [0, len(data_array)]:
         for y in range(1, len(data_array[0])):
             tree_stack.append((y, x))
@@ -138,11 +141,7 @@ if __name__ == '__main__':
         for x in range(1, len(data_array)):
             tree_stack.append((y, x))
 
-    print(f" stack now {len(tree_stack)}")
-
-    tree_stack = find_visible_trees(data_array, tree_stack)
-
-    print(f"size of array: {len(data_array)} * {len(data_array[0])}")
+    # print(f"size of array: {len(data_array)} * {len(data_array[0])}")
     print(f"visible trees {len(tree_stack)}")
 
     visible_areas = calculate_visible_areas(data_array, tree_stack)
