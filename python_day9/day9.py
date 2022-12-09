@@ -50,39 +50,15 @@ def check_tail_move(tail_position: tuple, head_position: tuple) -> tuple:
             f" no need to move, staying {tail_position} head {head_position}")
         return tail_position
 
-    # We need to move left/right
-    if y_offset == 0:
+    # We check if we are moving diagonial
+    lower_limit = 1 * (y_offset != 0) * (x_offset != 0)
 
-        offset = 0
-        if x_offset > 0:
-            offset = 1
-        else:
-            offset = -1
-        tail_position = (tail_position[0] + offset, tail_position[1])
-        print(f"moving left/right {offset} to {tail_position}")
-    elif x_offset == 0:
-        # we need to move up/down
-        offset = 0
-        if y_offset > 0:
-            offset = 1
-        else:
-            offset = -1
-        tail_position = (tail_position[0], tail_position[1] + offset)
-        print(f"moving up/down {offset} to {tail_position}")
-    else:
-        if y_offset > 0:
-            y_offset = 1
-        else:
-            y_offset = -1
-        if x_offset > 0:
-            x_offset = 1
-        else:
-            x_offset = -1
-        tail_position = (tail_position[0] +
-                         x_offset, tail_position[1] + y_offset)
-        print(
-            f"Would need to move diagonial! to {tail_position} toward {head_position}")
-
+    # If diagonial, limit is 1, if not, it is 0
+    y_offset = 0 + (y_offset > 0) * 1 - (y_offset < lower_limit) * 1
+    x_offset = 0 + (x_offset > 0) * 1 - (x_offset < lower_limit) * 1
+    print(
+        f"New position {tail_position} toward {head_position}")
+    tail_position = (tail_position[0] + x_offset, tail_position[1] + y_offset)
     return tail_position
 
 
