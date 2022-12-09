@@ -11,13 +11,13 @@ class Direction(Enum):
     RIGHT = 4
 
 
-def datareader(filename: str, translate=str) -> list:
+def datareader(filename: str, translate=str) -> list[str]:
     with open(filename, "r") as fileinput:
         for dataline in fileinput:
             yield translate(dataline.strip())
 
 
-def parse_data(data: list) -> (Direction, int):
+def parse_data(data: list) -> tuple[Direction, int]:
 
     (direction, amount) = data.split()
     amount = int(amount)
@@ -34,7 +34,7 @@ def check_direction(direction: str) -> Direction:
     return direction_mapping.get(direction, None)
 
 
-def get_direction_tuple(direction: Direction) -> tuple:
+def get_direction_tuple(direction: Direction) -> tuple[int, int]:
     direction_mapping = {Direction.UP: (0, 1),
                          Direction.DOWN: (0, -1),
                          Direction.LEFT: (-1, 0),
@@ -42,7 +42,7 @@ def get_direction_tuple(direction: Direction) -> tuple:
     return direction_mapping.get(direction, (0, 0))
 
 
-def check_tail_move(tail_position: tuple, head_position: tuple) -> tuple:
+def check_tail_move(tail_position: tuple, head_position: tuple) -> tuple[int, int]:
     (x_offset, y_offset) = (
         head_position[0] - tail_position[0], head_position[1] - tail_position[1])
     if abs(x_offset) <= 1 and abs(y_offset) <= 1:
@@ -62,7 +62,7 @@ def check_tail_move(tail_position: tuple, head_position: tuple) -> tuple:
     return tail_position
 
 
-def move_position(head_positions: list, tail_position: tuple, input: tuple) -> tuple:
+def move_position(head_positions: list, tail_position: tuple, input: tuple) -> tuple[list[tuple], tuple, set]:
     (x, y) = get_direction_tuple(input[0])
     visited_positions = set()
     for _x in range(0, input[1]):
