@@ -86,7 +86,7 @@ def check_tail_move(tail_position: tuple, head_position: tuple) -> tuple:
     return tail_position
 
 
-def move_position(head_positions: list, tail_position: tuple, input: tuple) -> (tuple, tuple, set):
+def move_position(head_positions: list, tail_position: tuple, input: tuple) -> tuple:
     (x, y) = get_direction_tuple(input[0])
     visited_positions = set()
     for _x in range(0, input[1]):
@@ -107,7 +107,7 @@ def move_position(head_positions: list, tail_position: tuple, input: tuple) -> (
     return head_positions, tail_position, visited_positions
 
 
-def check_knots(data, knots):
+def check_knots(data: list, knots: int) -> int:
 
     tail_position = (0, 0)
     head_positions = [(0, 0) for x in range(knots)]
