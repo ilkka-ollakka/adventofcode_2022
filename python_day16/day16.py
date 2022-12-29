@@ -111,39 +111,48 @@ for source_valve in potential_valves | set(["AA"]):
 
 # part 2
 
-def find_max_flow_multiposition(current_points, times_left, opened_valves, valve_network, potential_valves, route_speeds):
-    if len(potential_valves) == 0:
+def find_max_flow_multiposition(current_point, time_left, opened_valves, valve_network, potential_valves, route_speeds):
+    # provide current route as one candidate
+    # print(
+    #    f"returning route {opened_valves} potential_valves: {potential_valves}")
+    if time_left <= 0 or len(potential_valves) == 0:
+
         return calculate_flow(opened_valves, valve_network), opened_valves
-    my_current = valve_network.get(current_points[0])
-    elephan_current = valve_network.get(current_points[1])
-    max_flows = []
-    for valves in combinations(potential_valves, 2):
+
+    # print(potential_valves)
+    for valve in potential_valves:
         # print(f"{current_point} to {valve} with values {valve_network.get(valve)}")
-        my_valve = valves[0]
-        my_position, elephant_position = current_points
-        elephant_valve = valves[1]
-        # print(my_valve, elephant_valve)
+        my_valve = valve
+        my_position = current_point
+
         steps_to_take_for_me = route_speeds[my_position][my_valve]
-        steps_to_take_for_elephant = route_speeds[elephant_position
-                                                  ][elephant_valve]
-        new_time_for_me = times_left[0] - steps_to_take_for_me - 1
-        new_time_for_elephant = times_left[1] - steps_to_take_for_elephant - 1
 
-        flow_result = find_max_flow_multiposition(valves, [new_time_for_me, new_time_for_elephant], opened_valves | set(
-            [(my_valve, new_time_for_me), (elephant_valve, new_time_for_elephant)]), valve_network, potential_valves - set(valves),
+        new_time_for_me = time_left - steps_to_take_for_me - 1
+        if new_time_for_me < 0:
+            continue
+
+        yield from find_max_flow_multiposition(valve, new_time_for_me, opened_valves | set(
+            [(my_valve, new_time_for_me)]), valve_network, potential_valves - set([valve]),
             route_speeds)
-        if flow_result:
-            flow, flow_route = flow_result
-            max_flows.append((flow, flow_route))
-    if max_flows:
-        print(max(max_flows))
-        return max(max_flows)
+
+    # yield current point
+    yield calculate_flow(opened_valves, valve_network), opened_valves
 
 
-result = find_max_flow_multiposition(["AA", "AA"], [26, 26],
+result = find_max_flow_multiposition("AA", 26,
                                      set(), valve_network, potential_valves, route_speeds)
-if result:
-    score, route = result
-    print(f"max score found {score}")
-    print(f"with route {sorted(route, key=lambda x: x[1], reverse=True)}")
-print(result)
+max_reach = 0
+for my_route, elephant_route in combinations(result, 2):
+    # compare routes
+    my_route_points = [x[0] for x in my_route[1]]
+    other_route_points = [x[0] for x in elephant_route[1]]
+    if len(set(my_route_points) & set(other_route_points)) != 0:
+        continue
+
+    # print(
+    #     f"Comparing combination of routes {my_route_points} and {other_route_points}")
+    if (my_route[0] + elephant_route[0]) > max_reach:
+        print(
+            f"better route than before as {my_route_points} and {other_route_points} scoring: {my_route[0] + elephant_route[0]}")
+        max_reach = my_route[0] + elephant_route[0]
+print(f"max valve {max_reach}")
