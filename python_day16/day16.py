@@ -100,13 +100,13 @@ for source_valve in potential_valves | set(["AA"]):
         else:
             route_speeds[source_valve][target_valve] = distance
 
-# result = find_max_flow(current_position, time_left,
-#                        opened_valves, valve_network, potential_valves, route_speeds)
-# if result:
-#     score, route = result
-#    print(f"max score found {score}")
-#    print(f"with route {sorted(route, key=lambda x: x[1], reverse=True)}")
-# print(result)
+result = find_max_flow(current_position, time_left,
+                       opened_valves, valve_network, potential_valves, route_speeds)
+if result:
+    score, route = result
+    print(f"max score found {score}")
+    print(f"with route {sorted(route, key=lambda x: x[1], reverse=True)}")
+print(result)
 
 
 # part 2
