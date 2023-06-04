@@ -64,63 +64,37 @@ fn own_piece_to_result_piece(opponent_piece: &str, own_piece: &str) -> String {
 }
 
 fn piece_score(piece: &str) -> u32 {
-    let piece = get_piece_info(piece);
-    return piece.score;
+    return get_piece_info(piece).score;
 }
 
 fn main() -> Result<(), Box<dyn Error>> {
     let output = read_file_and_split("day2.txt")?;
 
     let mut final_score: u32 = 0;
+    let mut final_score2: u32 = 0;
 
     for line in output {
-        let mut line_split = line.split(" ");
-        let (opponent, own) = (
-            line_split.next().unwrap().to_string(),
-            line_split.next().unwrap().to_string(),
-        );
+        let line_split: Vec<&str> = line.split(" ").collect();
+        let (opponent, own) = (line_split[0], line_split[1]);
 
-        println!("opponent {} own {}", opponent, own);
+        // println!("opponent {} own {}", opponent, own);
         let mapped_own = map_own_to_piece(&own);
 
         let score = end_score(&opponent, &mapped_own);
-        let piece_score = piece_score(&mapped_own);
+        let piece_score_result = piece_score(&mapped_own);
 
-        println!(
-            "own piece {}, end score: {} + {}",
-            mapped_own, score, piece_score
-        );
-        final_score += score + piece_score;
+        let mapped_own2 = own_piece_to_result_piece(&opponent, &own);
+
+        let score2 = end_score(&opponent, &mapped_own2);
+        let piece_score2 = piece_score(&mapped_own2);
+
+        final_score += score + piece_score_result;
+        final_score2 += score2 + piece_score2;
     }
 
-    println!("End score: {}", final_score);
+    println!("Part1 end score: {}", final_score);
     // Part 2
 
-    //println!("output  {:#?}", output);
-
-    let output2 = read_file_and_split("day2.txt")?;
-
-    final_score = 0;
-
-    for line in output2 {
-        let mut line_split = line.split(" ");
-        let (opponent, own) = (
-            line_split.next().unwrap().to_string(),
-            line_split.next().unwrap().to_string(),
-        );
-        println!("opponent {} own {}", opponent, own);
-        let mapped_own = own_piece_to_result_piece(&opponent, &own);
-
-        let score = end_score(&opponent, &mapped_own);
-        let piece_score = piece_score(&mapped_own);
-
-        println!(
-            "own piece {}, end score: {} + {}",
-            mapped_own, score, piece_score
-        );
-        final_score += score + piece_score;
-    }
-
-    println!("Part2 end score: {}", final_score);
+    println!("Part2 end score: {}", final_score2);
     Ok(())
 }
