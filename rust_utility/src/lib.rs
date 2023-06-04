@@ -38,38 +38,25 @@ pub fn read_file_and_split(filename: &str) -> Result<Vec<String>, Box<dyn Error>
 }
 
 pub fn read_daily_input(filename: &str, return_amount: usize) -> Result<Vec<u32>, Box<dyn Error>> {
-    let file = File::open(format!("../{}", filename))?;
-    let mut filebuffer = BufReader::new(file);
+    let file = BufReader::new(File::open(format!("../{}", filename)).expect("Cannot open file"));
 
     let mut elfs: Vec<u32> = Vec::new();
     let mut elf: u32 = 0;
 
-    loop {
-        let mut line: String = String::new();
-        let read_amount = filebuffer.read_line(&mut line)?;
+    file.lines()
+        .filter_map(|line| line.ok())
+        .for_each(|string| {
+            match string.parse::<u32>() {
+                Ok(result) => elf += result,
+                Err(_) => {
+                    elfs.push(elf);
+                    elf = 0;
+                }
+            };
+        });
 
-        if read_amount == 0 {
-            // End of File
-            break;
-        }
-
-        line = (*line.trim()).to_string();
-
-        //println!("read {} content '{}'", read_amount, line.trim());
-
-        if line.is_empty() {
-            elfs.push(elf);
-            elf = 0;
-            continue;
-        }
-
-        let result: u32 = line.parse()?;
-
-        elf += result;
-    }
-
-    elfs.sort_by_key(|k| -1 * *k as i32);
     if return_amount != usize::MAX {
+        elfs.sort_by_key(|k| -1 * *k as i32);
         elfs.truncate(return_amount);
     }
     Ok(elfs)
